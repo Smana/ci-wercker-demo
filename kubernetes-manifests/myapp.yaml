@@ -1,0 +1,21 @@
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: cncp-meetup:IMGTAG
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CNCP_PASS
+          valueFrom:
+            secretKeyRef:
+              name: MYAPP_SECRET_NAME
+              key: key1
