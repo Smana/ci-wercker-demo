@@ -1,3 +1,4 @@
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: myapp
@@ -10,9 +11,11 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: cncp-meetup:IMGTAG
+        image: gcr.io/kargo-ci-1/cncp-meetup:IMGTAG
         ports:
         - containerPort: 8080
+        command:
+        - /myapp
         env:
         - name: CNCP_USER
           value: smana
