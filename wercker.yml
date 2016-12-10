@@ -9,6 +9,11 @@ build:
         code: |
           go get
 
+    # Copy kubernetes manifests
+      name: copy kubernetes manifests
+      code: |
+        cp -rp kubernetes-manifests $WERCKER_OUTPUT_DIR/
+
     # Build the project
     - script:
         name: go build
@@ -20,11 +25,6 @@ build:
         name: go test
         code: |
           go test ./...
-
-#    # Install the binary
-#    - script:
-#        name: copy myapp bin to /
-#        script: cp -vp $WERCKER_OUTPUT_DIR/myapp /
 
 # Push to Google Container Registry
 push-gcr:
@@ -46,29 +46,36 @@ push-gcr:
         repository: gcr.io/kargo-ci-1/cncp-meetup
         registry: https://gcr.io
         tag: latest, $IMGTAG
-#    - script:
-#        name: copy kubernetes manifests
-#        code: |
-#          mv -v kubernetes-manifests $WERCKER_OUTPUT_DIR
-#
-## Update MYAPP
-#update-myapp:
-#  steps:
-#    - script:
-#        name: replace secret and tag in deployment
-#        code: |
-#          export MYAPP_SECRET_NAME="myapp-$WERCKER_MAIN_PIPELINE_STARTED"
-#          sed -i "s/MYAPP_SECRET_NAME/$MYAPP_SECRET_NAME/g" kubernetes-manifests/myapp.yaml
-#          sed -i "s/IMGTAG/$IMGTAG/g" kubernetes-manifests/myapp.yaml
-#    - kubectl:
-#        server: $CLUSTER0_API_ENDPOINT
-#        username: $CLUSTER0_USER
-#        password: $CLUSTER0_PASSWORD
-#        insecure-skip-tls-verify: true
-#        command: apply -f kubernetes-manifests/myapp.yaml
-#    - kubectl:
-#        server: $CLUSTER0_API_ENDPOINT
-#        username: $CLUSTER0_USER
-#        password: $CLUSTER0_PASSWORD
-#        insecure-skip-tls-verify: true
-#        command: create secret generic $MYAPP_SECRET_NAME --from-literal=key1=$MYAPP_PASSWORD
+
+    # Copy kubernetes manifests
+    - script:
+        name: copy kubernetes manifests
+        code: |
+          mv -v kubernetes-manifests $WERCKER_OUTPUT_DIR
+
+# Update MYAPP
+update-myapp:
+  steps:
+    - script:
+      name: build Docker image Tag
+      code: |
+        export BUILD_DATE=$(date +%Y%m%d)
+        export IMGTAG="$BUILD_DATE-$WERCKER_GIT_COMMIT"
+    - script:
+        name: replace secret and tag in deployment
+        code: |
+          export MYAPP_SECRET_NAME="myapp-$WERCKER_MAIN_PIPELINE_STARTED"
+          sed -i "s/MYAPP_SECRET_NAME/$MYAPP_SECRET_NAME/g" kubernetes-manifests/myapp-deployment.yaml
+          sed -i "s/IMGTAG/$IMGTAG/g" kubernetes-manifests/myapp-deployment.yaml
+    - kubectl:
+        server: $CLUSTER0_API_ENDPOINT
+        username: admin
+        password: $CLUSTER0_PASSWORD
+        insecure-skip-tls-verify: true
+        command: apply -f kubernetes-manifests/myapp-deployment.yaml
+    - kubectl:
+        server: $CLUSTER0_API_ENDPOINT
+        username: admin
+        password: $CLUSTER0_PASSWORD
+        insecure-skip-tls-verify: true
+        command: create secret generic $MYAPP_SECRET_NAME --from-literal=key1=$MYAPP_PASSWORD
