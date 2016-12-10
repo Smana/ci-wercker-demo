@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: cncp-meetup:IMGTAG
+        image: gcr.io/kargo-ci-1/cncp-meetup:IMGTAG
         ports:
         - containerPort: 8080
         env:
