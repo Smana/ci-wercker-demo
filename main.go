@@ -37,7 +37,7 @@ func main() {
 			log.Fatal("CNCP_PASS and CNCP_USER env vars not found !")
 		}
 		if checkAuth(w, r, cncpUser, cncpPass) {
-			w.Write([]byte("WELCOME TO CNCP PARIS !!\n"))
+			w.Write([]byte("Welcome to Cloud Native Computing Paris !! \n"))
 			// myOriginalHandler.ServeHTTP(w, r)
 			return
 		}
