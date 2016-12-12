@@ -24,7 +24,7 @@ spec:
   template:
     metadata:
       labels:
-        region: nginx
+        app: nginx
     spec:
       containers:
         - name: nginx
