@@ -37,11 +37,11 @@ func main() {
 			log.Fatal("CNCP_PASS and CNCP_USER env vars not found !")
 		}
 		if checkAuth(w, r, cidemoUser, cidemoPass) {
-			w.Write([]byte("Welcome to Paris !! \n"))
+			w.Write([]byte("Welcome to Paris ! \n"))
 			// myOriginalHandler.ServeHTTP(w, r)
 			return
 		}
-		w.Header().Set("WWW-Authenticate", `Basic realm="CNCP REALM"`)
+		w.Header().Set("WWW-Authenticate", `Basic realm="SMANA REALM"`)
 		w.WriteHeader(401)
 		w.Write([]byte("401 Unauthorized\n"))
 	})

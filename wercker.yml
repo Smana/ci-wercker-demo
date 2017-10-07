@@ -78,4 +78,4 @@ update-myapp:
         username: admin
         password: $CLUSTER0_PASSWORD
         insecure-skip-tls-verify: true
-        command: create secret generic $MYAPP_SECRET_NAME --from-literal=key1=$MYAPP_PASSWORD
+        command: create secret generic $MYAPP_SECRET_NAME --from-literal=key1=$MYAPP_PASSWORD --namespace=ci
