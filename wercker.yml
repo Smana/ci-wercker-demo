@@ -43,7 +43,7 @@ push-gcr:
     - internal/docker-push:
         username: _json_key
         password: $GCP_JSON_KEY
-        repository: gcr.io/kargo-ci-1/cncp-meetup
+        repository: gcr.io/elevated-style-182016/ci-demo
         registry: https://gcr.io
         tag: latest, $IMGTAG
 

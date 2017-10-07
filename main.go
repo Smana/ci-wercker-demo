@@ -31,12 +31,12 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// get env variables created with the kubernetes secret
-		cncpUser := os.Getenv("CNCP_USER")
-		cncpPass := os.Getenv("CNCP_PASS")
-		if cncpUser == "" || cncpPass == "" {
+		cidemoUser := os.Getenv("CNCP_USER")
+		cidemoPass := os.Getenv("CNCP_PASS")
+		if cidemoUser == "" || cidemoPass == "" {
 			log.Fatal("CNCP_PASS and CNCP_USER env vars not found !")
 		}
-		if checkAuth(w, r, cncpUser, cncpPass) {
+		if checkAuth(w, r, cidemoUser, cidemoPass) {
 			w.Write([]byte("Welcome to Paris !! \n"))
 			// myOriginalHandler.ServeHTTP(w, r)
 			return
