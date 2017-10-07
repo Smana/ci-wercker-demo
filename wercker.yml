@@ -42,9 +42,9 @@ push-gcr:
 
     - internal/docker-push:
         username: _json_key
-        password: $GCP_JSON_KEY
+        password: $GCP_JSON_KEY_FILE
         repository: gcr.io/elevated-style-182016/ci-demo
-        registry: https://gcr.io
+        registry: https://gcr.io/v2
         tag: latest, $IMGTAG
 
     # Copy kubernetes manifests
